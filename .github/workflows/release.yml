@@ -1,0 +1,164 @@
+name: Release
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  release-nightly:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "ci@retrovim.local"
+          git config --local user.name "RetroVIM CI"
+
+      - name: Delete existing nightly release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if gh release view nightly-build --repo ${{ github.repository }} 2>/dev/null; then
+            gh release delete nightly-build --repo ${{ github.repository }} --yes
+          fi
+          gh tag delete nightly-build --force 2>/dev/null || true
+
+      - name: Create nightly tag
+        run: |
+          git tag -fa nightly-build -m "RetroVIM Nightly Build"
+          git push origin nightly-build --force
+
+      - name: Generate Release Notes
+        run: |
+          cat > release_body.md << 'ENDOFFILE'
+          <p align="center">
+            <img src="https://raw.githubusercontent.com/itsvlxd/retrovim/main/assets/retrovim-logo.png" alt="RetroVIM" width="120">
+          </p>
+
+          <p align="center">
+            This build is from the latest <code>develop</code> branch.<br>
+            It is <strong>not recommended for production use</strong>.
+          </p>
+
+          <p align="center">
+            <img src="https://img.shields.io/badge/Plugins-28-0a0a0a?style=for-the-badge&labelColor=0a0a0a&color=F93BF3">
+            <img src="https://img.shields.io/badge/LSP%20Servers-23-0a0a0a?style=for-the-badge&labelColor=0a0a0a&color=FA8AF4">
+            <img src="https://img.shields.io/badge/Themes-17-0a0a0a?style=for-the-badge&labelColor=0a0a0a&color=F93BF3">
+            <img src="https://img.shields.io/github/actions/workflow/status/itsvlxd/retrovim/release.yml?branch=develop&label=Build&style=for-the-badge&labelColor=0a0a0a">
+            <img src="https://img.shields.io/github/downloads/itsvlxd/retrovim/total?style=for-the-badge&labelColor=0a0a0a&color=FA8AF4">
+          </p>
+
+          ### ⚠️ Warnings
+
+          This build may contain bugs, regressions, or broken features that have not been fully tested. Do not use this build for production systems. Always backup your existing config before testing any pre-release version. Expect breaking changes between nightly builds.
+
+          ### 💻 About
+
+          Nightly builds are automatically created from the latest code committed to the <code>develop</code> branch. They represent the current state of active development and may include unfinished features, recent bug fixes, performance improvements, and other changes that have not yet been validated for a stable release.
+
+          If you encounter any issues, please report them on the [issue tracker](https://github.com/itsvlxd/retrovim/issues). Your feedback helps improve RetroVIM for everyone.
+
+          For a stable, reliable config for daily use, please wait for an official stable release and download it from the [Releases page](https://github.com/itsvlxd/retrovim/releases).
+
+          [🐛 Report a Bug](https://github.com/itsvlxd/retrovim/issues/new?labels=bug) · [✨ Request a Feature](https://github.com/itsvlxd/retrovim/issues/new?labels=enhancement)
+
+          **Commit:** ${{ github.sha }} · **Built:** ${{ github.event.head_commit.timestamp }}
+          ENDOFFILE
+
+      - name: Create Nightly Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly-build
+          name: 'RetroVIM Nightly'
+          body_path: release_body.md
+          draft: false
+          prerelease: true
+          overwrite: true
+          token: ${{ secrets.GH_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  release-stable:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    outputs:
+      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
+      new_release_version: ${{ steps.semantic.outputs.new_release_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "ci@retrovim.local"
+          git config --local user.name "RetroVIM CI"
+
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v6
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Brand stable release body
+        if: steps.semantic.outputs.new_release_published == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          VERSION: ${{ steps.semantic.outputs.new_release_version }}
+        run: |
+          RELEASE_TAG="v${VERSION}"
+          notes=$(gh release view "$RELEASE_TAG" --repo "${{ github.repository }}" --json body -q .body)
+          cat > stable_body.md << 'ENDOFFILE'
+          <p align="center">
+            <img src="https://raw.githubusercontent.com/itsvlxd/retrovim/main/assets/retrovim-logo.png" alt="RetroVIM" width="120">
+          </p>
+
+          <p align="center">
+            This is a stable release built from the <code>main</code> branch.<br>
+            Recommended for everyday use.
+          </p>
+
+          <p align="center">
+            <img src="https://img.shields.io/badge/Plugins-28-0a0a0a?style=for-the-badge&labelColor=0a0a0a&color=F93BF3">
+            <img src="https://img.shields.io/badge/LSP%20Servers-23-0a0a0a?style=for-the-badge&labelColor=0a0a0a&color=FA8AF4">
+            <img src="https://img.shields.io/badge/Themes-17-0a0a0a?style=for-the-badge&labelColor=0a0a0a&color=F93BF3">
+            <img src="https://img.shields.io/github/actions/workflow/status/itsvlxd/retrovim/release.yml?branch=main&label=Build&style=for-the-badge&labelColor=0a0a0a">
+            <img src="https://img.shields.io/github/downloads/itsvlxd/retrovim/total?style=for-the-badge&labelColor=0a0a0a&color=FA8AF4">
+          </p>
+
+          ### 💻 About
+
+          Stable releases are built from the <code>main</code> branch and contain only tested, production-ready changes. They are recommended for everyday use.
+
+          If you encounter any issues, please report them on the [issue tracker](https://github.com/itsvlxd/retrovim/issues). Your feedback helps improve RetroVIM for everyone.
+
+          Want the latest features and fixes? Try the [nightly release](https://github.com/itsvlxd/retrovim/releases/tag/nightly-build).
+
+          [🐛 Report a Bug](https://github.com/itsvlxd/retrovim/issues/new?labels=bug) · [✨ Request a Feature](https://github.com/itsvlxd/retrovim/issues/new?labels=enhancement)
+
+          **Commit:** ${{ github.sha }} · **Built:** ${{ github.event.head_commit.timestamp }}
+
+          ### 📜 Changelog
+
+          $notes
+          ENDOFFILE
+          gh release edit "$RELEASE_TAG" --repo "${{ github.repository }}" --notes-file stable_body.md
