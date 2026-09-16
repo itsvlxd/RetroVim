@@ -129,12 +129,7 @@ jobs:
           notes=$(gh release view "$RELEASE_TAG" --repo "${{ github.repository }}" --json body -q .body)
           cat > stable_body.md << 'ENDOFFILE'
           <p align="center">
-            <img src="https://raw.githubusercontent.com/itsvlxd/retrovim/main/assets/retrovim-logo.png" alt="RetroVIM" width="120">
-          </p>
-
-          <p align="center">
-            This is a stable release built from the <code>main</code> branch.<br>
-            Recommended for everyday use.
+            <img src="https://raw.githubusercontent.com/itsvlxd/retrovim/main/assets/retrovim-logo.png" alt="RetroVIM" width="520">
           </p>
 
           <p align="center">
