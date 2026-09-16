@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/retrovim-logo.png" alt="RetroVIM" width="520">
+<img src="assets/retrovim-logo.png" alt="RetroVim" width="520">
 
 A fully themed Neovim configuration with a live theme engine, built-in settings panel, terminal color syncing, and 17 curated themes.
 
@@ -41,12 +41,12 @@ A fully themed Neovim configuration with a live theme engine, built-in settings 
 </div>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/itsvlxd/RetroVim/develop/assets/screenshots/retrovim-cold-start.png" width="800" alt="RetroVIM Dashboard">
+  <img src="https://raw.githubusercontent.com/itsvlxd/RetroVim/develop/assets/screenshots/retrovim-cold-start.png" width="800" alt="RetroVim Dashboard">
 </p>
 
-## 🎨 What is RetroVIM
+## 🎨 What is RetroVim
 
-RetroVIM is a **synthwave-inspired Neovim configuration** with a fully integrated theme engine — live theme switching, terminal color syncing, a built-in settings panel, and 17 curated themes out of the box.
+RetroVim is a **synthwave-inspired Neovim configuration** with a fully integrated theme engine — live theme switching, terminal color syncing, a built-in settings panel, and 17 curated themes out of the box.
 
 One config to rule the editor: **23 language servers** via Mason with autocompletion, formatting and linting. **blink.cmp** for fast completions. **Treesitter** for syntax highlighting. **Snacks.nvim** dashboard, picker, explorer, terminal, lazygit, scratch buffers, profiler, image hover and notifications. **Session persistence**, **git integration** with diff viewer and hunk staging, **markdown preview**, and a **terminal-aware System theme** that syncs to your Kitty palette in real time.
 
@@ -162,7 +162,7 @@ brew install neovim node git gcc xclip go lazygit
 # Backup existing config
 mv ~/.config/nvim ~/.config/nvim.bak
 
-# Clone RetroVIM
+# Clone RetroVim
 git clone https://github.com/itsvlxd/retrovim ~/.config/nvim
 
 # Start Neovim — plugins, LSP servers, formatters and linters auto-install
@@ -425,7 +425,7 @@ Override the background color of any theme from the settings panel (key `g`). Pr
 <details open>
 <summary><b>🧭 Do I need to configure anything after installing?</b></summary>
 <br>
-No. RetroVIM works out of the box — all plugins, language servers, formatters and linters install automatically on first launch via Mason. Just open Neovim and start editing.
+No. RetroVim works out of the box — all plugins, language servers, formatters and linters install automatically on first launch via Mason. Just open Neovim and start editing.
 </details>
 
 <details>
@@ -447,7 +447,7 @@ Yes. The System theme gracefully falls back to `vim.g.terminal_color_*` variable
 </details>
 
 <details>
-<summary><b>⬆️ How do I update RetroVIM?</b></summary>
+<summary><b>⬆️ How do I update RetroVim?</b></summary>
 <br>
 Open the dashboard and press `u` when an update is available, or run:
 ```bash
@@ -460,7 +460,7 @@ Plugins will update automatically on next launch via Lazy.
 
 ## ❤️ Contributing
 
-RetroVIM is open source (MIT) and community-driven. Contributions, bug reports and feature ideas are all welcome.
+RetroVim is open source (MIT) and community-driven. Contributions, bug reports and feature ideas are all welcome.
 
 - 🐛 **Found a bug?** — open an [issue](https://github.com/itsvlxd/retrovim/issues)
 - 🔧 **Want to contribute?** — fork, create a branch, and open a [pull request](https://github.com/itsvlxd/retrovim/pulls)
@@ -475,7 +475,7 @@ RetroVIM is open source (MIT) and community-driven. Contributions, bug reports a
 <br><br>
 ---
 <div align="center">
-  <img src="assets/retrovim-logo.png" alt="RetroVIM" width="80">
+  <img src="assets/retrovim-logo.png" alt="RetroVim" width="80">
   
   <sub>&copy; 2026 itsvlxd & Contributors &bull; <a href="https://github.com/itsvlxd/retrovim/blob/main/LICENSE">MIT License</a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://github.com/itsvlxd/retrovim/pulls">Contributing</a> &bull; <a href="https://github.com/itsvlxd/retrovim/issues">Issues</a> &bull; <a href="https://github.com/itsvlxd/retrovim/pulls">Pulls</a></sub>
   <br>

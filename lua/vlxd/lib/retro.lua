@@ -300,7 +300,7 @@ function M.check_update()
 					_has_update = (local_hash ~= remote_hash)
 
 					if _has_update and not _notified_update then
-						M.notify("A new version of RetroVIM is available!", "info")
+						M.notify("A new version of RetroVim is available!", "info")
 						_notified_update = true
 					end
 				end
@@ -321,12 +321,12 @@ function M.update()
 						M.notify("New tag detected: " .. latest_tag, "info")
 
 						git.run_async({ "git", "checkout", latest_tag }, function()
-							M.notify("RetroVIM Updated to " .. latest_tag, "info")
+							M.notify("RetroVim updated to " .. latest_tag, "info")
 							_has_update = false
 							Snacks.dashboard.update()
 						end)
 					else
-						M.notify("RetroVIM updated to latest commit on main.", "info")
+						M.notify("RetroVim updated to latest commit on main.", "info")
 						_has_update = false
 						Snacks.dashboard.update()
 					end
@@ -446,7 +446,7 @@ function M.open_theme_picker()
 				table.insert(themes, {
 					text = data.title or mod_name,
 					file = mod_name,
-					description = data.description or "RetroVIM Theme",
+					description = data.description or "RetroVim Theme",
 					colors = data.darkMode or data.lightMode or {},
 					is_custom = false,
 				})
@@ -764,7 +764,7 @@ function M.update_status()
 	end
 
 	local icon = _has_update and "󱓄 " or " "
-	local label = _has_update and "Update Available" or "RetroVIM is up to date"
+	local label = _has_update and "Update Available" or "RetroVim is up to date"
 	local hl = _has_update and "SnacksDashboardDir" or "comment"
 
 	local text = {
