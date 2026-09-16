@@ -38,9 +38,21 @@ function M.get_commit()
 end
 
 function M.get_version()
-	return M.run({ "git", "describe", "--tags", "--abbrev=0" })
-		or M.run({ "git", "rev-parse", "--short", "HEAD" })
-		or "Latest"
+	local branch = M.get_branch()
+	local commit = M.get_commit()
+
+	if branch == "main" then
+		local tag = M.run({ "git", "describe", "--tags", "--abbrev=0" })
+		if tag then
+			return tag
+		end
+	end
+
+	if branch and commit and branch ~= "N/A" and commit ~= "N/A" then
+		return branch .. " • " .. commit
+	end
+
+	return commit or branch or "Latest"
 end
 
 return M
