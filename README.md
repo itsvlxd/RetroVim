@@ -5,8 +5,7 @@
 A fully themed Neovim configuration with a live theme engine, built-in settings panel, terminal color syncing, and 17 curated themes.
 
 <p align="center">
-  <img alt="Theme Engine" src="https://img.shields.io/badge/Theme%20Engine-F93BF3?style=for-the-badge">
-  <img alt="Release v1.3.0" src="https://img.shields.io/badge/Release%20v1.3.0-FA8AF4?style=for-the-badge">
+  <img alt="Rvlease" src="https://img.shields.io/github/v/release/itsvlxd/retrovim?style=for-the-badge&labelColor=0a0a0a&color=FA8AF4&prefix=v">
   <img alt="29 Plugins" src="https://img.shields.io/badge/29%20Plugins-F93BF3?style=for-the-badge">
   <img alt="23 LSP Servers" src="https://img.shields.io/badge/23%20LSP%20Servers-FA8AF4?style=for-the-badge">
   <img alt="17 Themes" src="https://img.shields.io/badge/17%20Themes-F93BF3?style=for-the-badge">
