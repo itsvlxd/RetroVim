@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/itsvlxd/RetroVim/compare/v1.1.0...v1.2.0) (2026-09-17)
+
+
+### Features
+
+* **plugins:** add flash highlight plugin ([536c818](https://github.com/itsvlxd/RetroVim/commit/536c81867289c765b5916ec2125bc46d6354ce79))
+* **retrovim:** add flash highlight plugin and readme update ([78ea181](https://github.com/itsvlxd/RetroVim/commit/78ea181da74ca607714c61012dd1f6c93fb99c71))
+
 # [1.1.0](https://github.com/itsvlxd/RetroVim/compare/v1.0.0...v1.1.0) (2026-09-16)
 
 
