@@ -6,7 +6,7 @@ A fully themed Neovim configuration with a live theme engine, built-in settings 
 
 <p align="center">
   <img alt="Rvlease" src="https://img.shields.io/github/v/release/itsvlxd/retrovim?style=for-the-badge&labelColor=0a0a0a&color=FA8AF4&prefix=v">
-  <img alt="30 Plugins" src="https://img.shields.io/badge/30%20Plugins-F93BF3?style=for-the-badge">
+  <img alt="31 Plugins" src="https://img.shields.io/badge/31%20Plugins-F93BF3?style=for-the-badge">
   <img alt="23 LSP Servers" src="https://img.shields.io/badge/23%20LSP%20Servers-FA8AF4?style=for-the-badge">
   <img alt="17 Themes" src="https://img.shields.io/badge/17%20Themes-F93BF3?style=for-the-badge">
 </p>
@@ -61,7 +61,7 @@ One config to rule the editor: **23 language servers** via Mason with autocomple
 |---|---|
 | 🎨 **Live Theme Engine** | 17 built-in themes with instant switching. Live color swatch previews in the picker. Dark/Light mode toggle. Transparency and Lualine transparency options. Custom background override for any theme. Custom themes via `~/.config/retrovim/themes/`. |
 | 🎛️ **Built-in Settings Panel** | A full control panel accessible from the dashboard (`<space>qs`). Theme picker, transparency, dark mode, background override, bufferline style, tree style, kitty sync interval, reset to defaults — all in one place. |
-| 🧩 **LSP & Completion** | 23 language servers via Mason (TypeScript, Go, Rust, C/C++, Python, Lua, Svelte, Tailwind CSS, and more). **blink.cmp** for fast Rust-powered autocompletion with LSP, snippets, path and buffer sources. Ghost text suggestions. Auto-brackets on accept. |
+| 🧩 **LSP & Completion** | 23 language servers via Mason (TypeScript, Go, Rust, C/C++, Python, Lua, Svelte, Tailwind CSS, and more). **blink.cmp** for fast Rust-powered autocompletion with LSP, snippets, path and buffer sources. Ghost text suggestions. Auto-brackets on accept. **ts-error-translator** for human-readable TypeScript errors. |
 | 🌳 **File Explorer** | **Neo-tree** sidebar with git status, diagnostics, clipboard sync, file operations (add/delete/rename/copy/move). **Snacks Explorer** with tree view, live diagnostics, git untracked, and keyboard-driven file management. |
 | 🔍 **Fuzzy Finding & Search** | **Snacks Picker** with fuzzy matching, frecency, smartcase, and 20+ sources: files, git files, buffers, recent, projects, grep, live grep, diagnostics, help, highlights, keymaps, man pages, marks, registers, undo history, and more. **Grug-far** for project-wide search and replace with live preview. |
 | 📝 **Editing** | **Flash.nvim** for jump/search with labels. **TreeSJ** for splitting/joining code blocks. **nvim-surround** for bracket/quote wrapping. **nvim-autopairs** for auto-closing brackets. **Comment.nvim** for context-aware commenting. **toggle-bool** for flipping true/false. **blink.cmp** for completion. **Treesitter** for incremental selection and text objects. |
