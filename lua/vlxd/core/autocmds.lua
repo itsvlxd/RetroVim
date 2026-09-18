@@ -1,4 +1,4 @@
-local function add_to_git()
+--[[ local function add_to_git()
 	local file = vim.api.nvim_buf_get_name(0)
 	if file == "" or file:match("snippets") then
 		return
@@ -14,7 +14,7 @@ end
 vim.api.nvim_create_autocmd("BufWritePost", {
 	pattern = "*",
 	callback = add_to_git,
-})
+}) ]]
 
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
 	command = "checktime",
@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	group = vim.api.nvim_create_augroup("vlxd-highlight-yank", { clear = true }),
 	callback = function()
 		vim.highlight.on_yank({
-			higroup = "IncSearch",
+			hvgroup = "IncSearch",
 			timeout = 150,
 		})
 	end,

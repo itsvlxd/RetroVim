@@ -117,6 +117,7 @@ local default_state = {
 	transparent = false,
 	lualine_trans = false,
 	bufferline_sep = "thick",
+	indent_mode = "hlchunk",
 	system_sync_interval = 5,
 	bg_override = nil,
 }
@@ -190,7 +191,7 @@ function M.get_theme_colors()
 	return FALLBACK_COLORS
 end
 
----@return {theme: string, dark: boolean, transparent: boolean, lualine_trans: boolean, bufferline_sep: "slant" | "slope" | "thick" | "thin", neotree_expander: boolean, system_sync_interval: number, bg_override: string?}
+---@return {theme: string, dark: boolean, transparent: boolean, lualine_trans: boolean, bufferline_sep: "slant" | "slope" | "thick" | "thin", indent_mode: "hlchunk" | "snacks", neotree_expander: boolean, system_sync_interval: number, bg_override: string?}
 function M.get_settings()
 	local f = io.open(state_path, "r")
 
@@ -367,6 +368,7 @@ function M.apply(opts)
 	local transparent = (opts.transparent == nil) and state.transparent or opts.transparent
 	local lualine_trans = (opts.lualine_trans == nil) and state.lualine_trans or opts.lualine_trans
 	local neotree_expander = (opts.neotree_expander == nil) and state.neotree_expander or opts.neotree_expander
+	local indent_mode = opts.indent_mode or state.indent_mode
 	local system_sync_interval = opts.system_sync_interval or state.system_sync_interval
 	local bg_override = opts.bg_override or state.bg_override
 
@@ -407,6 +409,7 @@ function M.apply(opts)
 		transparent = transparent,
 		lualine_trans = lualine_trans,
 		bufferline_sep = bufferline_sep,
+		indent_mode = indent_mode,
 		neotree_expander = neotree_expander,
 		system_sync_interval = system_sync_interval,
 		bg_override = bg_override,
@@ -425,12 +428,17 @@ function M.apply(opts)
 end
 
 function M.refresh_control_panel()
-	local old_win = vim.api.nvim_get_current_win()
-	M.control_panel()
-
-	if vim.api.nvim_win_is_valid(old_win) then
-		pcall(vim.api.nvim_win_close, old_win, true)
+	-- Close any existing Snacks dashboard windows first
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		pcall(function()
+			local buf = vim.api.nvim_win_get_buf(win)
+			if vim.bo[buf].filetype == "snacks_dashboard" then
+				vim.api.nvim_win_close(win, true)
+			end
+		end)
 	end
+
+	M.control_panel()
 end
 
 function M.open_theme_picker()
@@ -736,6 +744,69 @@ function M.open_bg_picker()
 	end)
 end
 
+function M.get_hlchunk_colors()
+	local colors = M.get_theme_colors()
+	return {
+		chunk = {
+			{ fg = colors.purple or "#806d9c" },
+			{ fg = colors.red or "#c21f30" },
+		},
+		indent = {
+			{ fg = colors.gray or "#505050" },
+			{ fg = colors.dark_gray or "#606060" },
+		},
+	}
+end
+
+function M.apply_indent_mode(mode)
+	M.apply({ indent_mode = mode })
+
+	if mode == "snacks" then
+		-- Disable hlchunk indent via its user command
+		pcall(function()
+			vim.cmd("DisableHLIndent")
+		end)
+		pcall(function()
+			vim.cmd("DisableHLChunk")
+		end)
+		-- Enable snacks indent
+		pcall(function()
+			Snacks.indent.enable()
+		end)
+		M.notify("Switched to Snacks indent.", "info")
+	elseif mode == "hlchunk" then
+		-- Disable snacks indent
+		pcall(function()
+			Snacks.indent.disable()
+		end)
+		-- Enable hlchunk indent via its user command
+		pcall(function()
+			vim.cmd("EnableHLIndent")
+		end)
+		pcall(function()
+			vim.cmd("EnableHLChunk")
+		end)
+		M.notify("Switched to Hlchunk indent.", "info")
+	end
+end
+
+function M.open_indent_picker()
+	local settings = M.get_settings()
+	local items = { "Hlchunk", "Snacks" }
+	local lookup = { ["Hlchunk"] = "hlchunk", ["Snacks"] = "snacks" }
+	local current = settings.indent_mode == "hlchunk" and "Hlchunk" or "Snacks"
+
+	Snacks.picker.select(items, {
+		prompt = "󰇝 Indent Mode",
+		default = current,
+	}, function(choice)
+		if choice and lookup[choice] then
+			M.apply_indent_mode(lookup[choice])
+		end
+		M.refresh_control_panel()
+	end)
+end
+
 function M.startup()
 	return function()
 		local v = vim.version()
@@ -870,6 +941,14 @@ function M.control_panel()
 					desc = "Bufferline Style: " .. (settings.bufferline_sep or "thick"),
 					action = function()
 						M.open_bufferline_sep_picker()
+					end,
+				},
+				{
+					icon = "󰇝 ",
+					key = "y",
+					desc = "Indent: " .. (settings.indent_mode == "hlchunk" and "Hlchunk" or "Snacks"),
+					action = function()
+						M.open_indent_picker()
 					end,
 				},
 				{

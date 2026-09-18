@@ -313,7 +313,7 @@ return {
 			},
 		},
 		indent = {
-			enabled = true,
+			enabled = retro.get_settings().indent_mode == "snacks",
 			priority = 1,
 			char = "│",
 			only_scope = false,
