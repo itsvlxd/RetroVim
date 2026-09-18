@@ -6,7 +6,7 @@ A fully themed Neovim configuration with a live theme engine, built-in settings 
 
 <p align="center">
   <img alt="Rvlease" src="https://img.shields.io/github/v/release/itsvlxd/retrovim?style=for-the-badge&labelColor=0a0a0a&color=FA8AF4&prefix=v">
-  <img alt="31 Plugins" src="https://img.shields.io/badge/31%20Plugins-F93BF3?style=for-the-badge">
+  <img alt="32 Plugins" src="https://img.shields.io/badge/32%20Plugins-F93BF3?style=for-the-badge">
   <img alt="23 LSP Servers" src="https://img.shields.io/badge/23%20LSP%20Servers-FA8AF4?style=for-the-badge">
   <img alt="17 Themes" src="https://img.shields.io/badge/17%20Themes-F93BF3?style=for-the-badge">
 </p>
@@ -66,7 +66,7 @@ One config to rule the editor: **23 language servers** via Mason with autocomple
 | 🔍 **Fuzzy Finding & Search** | **Snacks Picker** with fuzzy matching, frecency, smartcase, and 20+ sources: files, git files, buffers, recent, projects, grep, live grep, diagnostics, help, highlights, keymaps, man pages, marks, registers, undo history, and more. **Grug-far** for project-wide search and replace with live preview. |
 | 📝 **Editing** | **Flash.nvim** for jump/search with labels. **TreeSJ** for splitting/joining code blocks. **nvim-surround** for bracket/quote wrapping. **nvim-autopairs** for auto-closing brackets. **Comment.nvim** for context-aware commenting. **toggle-bool** for flipping true/false. **blink.cmp** for completion. **Treesitter** for incremental selection and text objects. |
 | 🔄 **Git** | **Gitsigns** for sign column indicators, hunk staging and resetting. **Diffview** for enhanced git diff and file history. **Lazygit** integration via Snacks. **Snacks.gitbrowse** to open files on GitHub. **Snacks.git** for blame, log, stash, and GitHub issues/PRs. |
-| 🖥️ **UI** | **Bufferline** with customizable separators. **Lualine** with LSP progress. **Noice** for modern cmdline and popupmenu UI. **nvim-scrollbar** with git and diagnostic markers. **Which-key** for keymap discovery. **Snacks dashboard** with update checker. **Snacks notifications** with compact style. **Snacks statuscolumn** with marks, signs, folds and git. **Snacks indent** with scope highlighting. **Snacks scroll** with smooth animation. |
+| 🖥️ **UI** | **Bufferline** with customizable separators. **Lualine** with LSP progress. **Noice** for modern cmdline and popupmenu UI. **nvim-scrollbar** with git and diagnostic markers. **Which-key** for keymap discovery. **Snacks dashboard** with update checker. **Snacks notifications** with compact style. **Snacks statuscolumn** with marks, signs, folds and git. **hlchunk.nvim** for indent guides and code chunk highlighting. **Snacks scroll** with smooth animation. |
 | 🛠️ **Tooling** | **Conform.nvim** for format-on-save (Biome, Prettier, Stylua, shfmt, gofumpt). **nvim-lint** for async linting (ESLint, golangci-lint, pylint). **Trouble** for diagnostics/symbols/references panel. **Snacks profiler** for performance profiling. **Snacks terminal** with auto-close. **Snacks scratch** buffers with autowrite. |
 | 💾 **Sessions & Persistence** | **Persisted.nvim** for automatic session save/restore, git branch-aware. **Snacks.bigfile** handler that disables features for files over 1.5MB. |
 | 🔄 **Terminal Sync** | System theme that reads your terminal's color palette from Kitty config. Configurable sync interval (5s, 15s, 30s, 60s). Automatic detection of terminal colors via `vim.g.terminal_color_*` with fallback colors. |
@@ -414,6 +414,8 @@ Override the background color of any theme from the settings panel (key `g`). Pr
 | `<leader>ih` | Image hover |
 | `<leader>pp` | Profiler toggle |
 | `<leader>ps` | Profiler scratch buffer |
+| `:DisableHLchunk` | Disable indent/chunk highlighting |
+| `:EnableHLchunk` | Enable indent/chunk highlighting |
 
 ### 🔤 Completion (blink.cmp)
 

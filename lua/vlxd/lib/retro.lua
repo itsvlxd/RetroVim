@@ -117,6 +117,7 @@ local default_state = {
 	transparent = false,
 	lualine_trans = false,
 	bufferline_sep = "thick",
+	indent_mode = "hlchunk",
 	system_sync_interval = 5,
 	bg_override = nil,
 }
@@ -736,6 +737,82 @@ function M.open_bg_picker()
 	end)
 end
 
+function M.get_hlchunk_colors()
+	local colors = M.get_theme_colors()
+	return {
+		chunk = {
+			{ fg = colors.purple or "#806d9c" },
+			{ fg = colors.red or "#c21f30" },
+		},
+		indent = {
+			{ fg = colors.gray or "#505050" },
+			{ fg = colors.dark_gray or "#606060" },
+		},
+	}
+end
+
+function M.apply_indent_mode(mode)
+	M.apply({ indent_mode = mode })
+
+	if mode == "snacks" then
+		pcall(function()
+			Snacks.indent.enable()
+		end)
+	elseif mode == "hlchunk" then
+		pcall(function()
+			Snacks.indent.disable()
+		end)
+		local ok, hlchunk = pcall(require, "hlchunk")
+		if ok then
+			local hl_colors = M.get_hlchunk_colors()
+			hlchunk.setup({
+				chunk = {
+					enable = true,
+					priority = 15,
+					style = hl_colors.chunk,
+					use_treesitter = true,
+					chars = {
+						horizontal_line = "─",
+						vertical_line = "│",
+						left_top = "╭",
+						left_bottom = "╰",
+						right_arrow = ">",
+					},
+					textobject = "",
+					max_file_size = 1024 * 1024,
+					error_sign = true,
+					straight = false,
+					duration = 200,
+					delay = 300,
+				},
+				indent = {
+					enable = true,
+					style = hl_colors.indent,
+				},
+				line_num = { enable = false },
+				blank = { enable = false },
+			})
+		end
+	end
+end
+
+function M.open_indent_picker()
+	local settings = M.get_settings()
+	local items = { "Hlchunk", "Snacks" }
+	local lookup = { ["Hlchunk"] = "hlchunk", ["Snacks"] = "snacks" }
+	local current = settings.indent_mode == "hlchunk" and "Hlchunk" or "Snacks"
+
+	Snacks.picker.select(items, {
+		prompt = "󰇝 Indent Mode",
+		default = current,
+	}, function(choice)
+		if choice and lookup[choice] then
+			M.apply_indent_mode(lookup[choice])
+		end
+		M.refresh_control_panel()
+	end)
+end
+
 function M.startup()
 	return function()
 		local v = vim.version()
@@ -870,6 +947,14 @@ function M.control_panel()
 					desc = "Bufferline Style: " .. (settings.bufferline_sep or "thick"),
 					action = function()
 						M.open_bufferline_sep_picker()
+					end,
+				},
+				{
+					icon = "󰇝 ",
+					key = "y",
+					desc = "Indent: " .. (settings.indent_mode == "hlchunk" and "Hlchunk" or "Snacks"),
+					action = function()
+						M.open_indent_picker()
 					end,
 				},
 				{
