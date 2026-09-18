@@ -1,3 +1,14 @@
+# [1.3.0](https://github.com/itsvlxd/RetroVim/compare/v1.2.0...v1.3.0) (2026-09-18)
+
+
+### Features
+
+* **plugins:** add hlchunck and custom indent provider ([f041826](https://github.com/itsvlxd/RetroVim/commit/f04182687c0263f26bf6cb70efdadea50b1f2d58))
+* **plugins:** add treesj collapse plugin ([45121d3](https://github.com/itsvlxd/RetroVim/commit/45121d3460df3db9cc3ae96bebabe13087d50016))
+* **plugins:** add typescript error translator ([f87e211](https://github.com/itsvlxd/RetroVim/commit/f87e211558a3d516286223d7077ebebcd1ce7dac))
+* **retrovim:** add treesj, ts error translator, indent styles & remove git auto station ([33c21d5](https://github.com/itsvlxd/RetroVim/commit/33c21d5d23f16157d0c93ec06e0629e82a2cc53c))
+* **settings:** add indent highlight provider ([a2d07f3](https://github.com/itsvlxd/RetroVim/commit/a2d07f3a66308c2c5ac1269239bf99e5aa611c76))
+
 # [1.2.0](https://github.com/itsvlxd/RetroVim/compare/v1.1.0...v1.2.0) (2026-09-17)
 
 
