@@ -6,10 +6,11 @@ return {
 	config = function()
 		local settings = retro.get_settings()
 		local hl_colors = retro.get_hlchunk_colors()
+		local is_hlchunk = settings.indent_mode == "hlchunk"
 
 		require("hlchunk").setup({
 			chunk = {
-				enable = true,
+				enable = is_hlchunk,
 				priority = 15,
 				style = hl_colors.chunk,
 				use_treesitter = true,

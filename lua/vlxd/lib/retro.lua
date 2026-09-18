@@ -191,7 +191,7 @@ function M.get_theme_colors()
 	return FALLBACK_COLORS
 end
 
----@return {theme: string, dark: boolean, transparent: boolean, lualine_trans: boolean, bufferline_sep: "slant" | "slope" | "thick" | "thin", neotree_expander: boolean, system_sync_interval: number, bg_override: string?}
+---@return {theme: string, dark: boolean, transparent: boolean, lualine_trans: boolean, bufferline_sep: "slant" | "slope" | "thick" | "thin", indent_mode: "hlchunk" | "snacks", neotree_expander: boolean, system_sync_interval: number, bg_override: string?}
 function M.get_settings()
 	local f = io.open(state_path, "r")
 
@@ -368,6 +368,7 @@ function M.apply(opts)
 	local transparent = (opts.transparent == nil) and state.transparent or opts.transparent
 	local lualine_trans = (opts.lualine_trans == nil) and state.lualine_trans or opts.lualine_trans
 	local neotree_expander = (opts.neotree_expander == nil) and state.neotree_expander or opts.neotree_expander
+	local indent_mode = opts.indent_mode or state.indent_mode
 	local system_sync_interval = opts.system_sync_interval or state.system_sync_interval
 	local bg_override = opts.bg_override or state.bg_override
 
@@ -408,6 +409,7 @@ function M.apply(opts)
 		transparent = transparent,
 		lualine_trans = lualine_trans,
 		bufferline_sep = bufferline_sep,
+		indent_mode = indent_mode,
 		neotree_expander = neotree_expander,
 		system_sync_interval = system_sync_interval,
 		bg_override = bg_override,
@@ -426,12 +428,17 @@ function M.apply(opts)
 end
 
 function M.refresh_control_panel()
-	local old_win = vim.api.nvim_get_current_win()
-	M.control_panel()
-
-	if vim.api.nvim_win_is_valid(old_win) then
-		pcall(vim.api.nvim_win_close, old_win, true)
+	-- Close any existing Snacks dashboard windows first
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		pcall(function()
+			local buf = vim.api.nvim_win_get_buf(win)
+			if vim.bo[buf].filetype == "snacks_dashboard" then
+				vim.api.nvim_win_close(win, true)
+			end
+		end)
 	end
+
+	M.control_panel()
 end
 
 function M.open_theme_picker()
@@ -755,44 +762,31 @@ function M.apply_indent_mode(mode)
 	M.apply({ indent_mode = mode })
 
 	if mode == "snacks" then
+		-- Disable hlchunk indent via its user command
+		pcall(function()
+			vim.cmd("DisableHLIndent")
+		end)
+		pcall(function()
+			vim.cmd("DisableHLChunk")
+		end)
+		-- Enable snacks indent
 		pcall(function()
 			Snacks.indent.enable()
 		end)
+		M.notify("Switched to Snacks indent.", "info")
 	elseif mode == "hlchunk" then
+		-- Disable snacks indent
 		pcall(function()
 			Snacks.indent.disable()
 		end)
-		local ok, hlchunk = pcall(require, "hlchunk")
-		if ok then
-			local hl_colors = M.get_hlchunk_colors()
-			hlchunk.setup({
-				chunk = {
-					enable = true,
-					priority = 15,
-					style = hl_colors.chunk,
-					use_treesitter = true,
-					chars = {
-						horizontal_line = "─",
-						vertical_line = "│",
-						left_top = "╭",
-						left_bottom = "╰",
-						right_arrow = ">",
-					},
-					textobject = "",
-					max_file_size = 1024 * 1024,
-					error_sign = true,
-					straight = false,
-					duration = 200,
-					delay = 300,
-				},
-				indent = {
-					enable = true,
-					style = hl_colors.indent,
-				},
-				line_num = { enable = false },
-				blank = { enable = false },
-			})
-		end
+		-- Enable hlchunk indent via its user command
+		pcall(function()
+			vim.cmd("EnableHLIndent")
+		end)
+		pcall(function()
+			vim.cmd("EnableHLChunk")
+		end)
+		M.notify("Switched to Hlchunk indent.", "info")
 	end
 end
 
